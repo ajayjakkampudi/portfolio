@@ -4,9 +4,9 @@ import 'components/projects.dart';
 import 'components/about.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-void main() async{
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -15,10 +15,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyHomePage(),
-      debugShowCheckedModeBanner: false,
-    );
+    return FutureBuilder(
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return const MaterialApp(
+              home: MyHomePage(),
+              debugShowCheckedModeBanner: false,
+                // Your app content goes here
+                );
+          }
+        });
+    
   }
 }
 
